@@ -5,6 +5,8 @@ from aiogram.types import FSInputFile
 from dotenv import load_dotenv
 from os import getenv
 import logging
+import random
+from pathlib import Path
 
 load_dotenv()
 bot = Bot(token=getenv("BOT_TOKEN"))
@@ -34,12 +36,11 @@ async def myinfo_handler(message: types.Message):
 
 @dp.message(Command("random"))
 async def random_pic_handler(message: types.Message):
-    file1 = FSInputFile('images/dog.jpg')
-    file2 = FSInputFile('images/cat.jpg')
-    file3 = FSInputFile('images/horse.jpg')
-    await message.answer_photo(file1)
-    await message.answer_photo(file2)
-    await message.answer_photo(file3)
+    file_name = random.choice(list((Path(__file__).parent / "Images").iterdir()))
+    file_path = Path(__file__).parent / "Images" / file_name
+    logging.info(file_path)
+    file = types.FSInputFile(file_path)
+    await message.answer_photo(file)
 
 @dp.message()
 async def echo_handler(message: types.Message):
