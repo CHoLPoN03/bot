@@ -4,13 +4,20 @@ from aiogram.filters.command import Command
 import logging
 
 
-from config import dp, bot
-from handlers.start import start_router
-from handlers.myinfo import myinfo_router
-from handlers.random import random_pic_router
-from handlers.echo import echo_router
-from handlers.review import review_router
-from handlers.menu import menu_category_router
+
+from config import dp, bot, database
+from handlers import (
+    start_router,
+    echo_router,
+    review_router,
+    random_pic_router,
+    menu_category_router,
+    myinfo_router
+)
+
+
+async def on_startup(bot):
+    await database.create_tables()
 
 async def main():
     # регистрируем роутеры
@@ -21,6 +28,7 @@ async def main():
     dp.include_router(menu_category_router)
     dp.include_router(echo_router)
     # запускаем бот
+    dp.startup.register(on_startup)
     await dp.start_polling(bot)
 
 
