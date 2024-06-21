@@ -7,19 +7,19 @@ class Database:
 
     async def create_tables(self):
         async with aiosqlite.connect(self.path) as conn:
-            # создание всех таблиц
-            await conn.execute(Queries.CREATE_REVIEW_TABLE)
-            # await conn.execute(Queries.DROP_GENRES_TABLE)
-            # await conn.execute(Queries.DROP_BOOKS_TABLE)
-            # await conn.execute(Queries.CREATE_GENRES_TABLE)
-            # await conn.execute(Queries.CREATE_BOOKS_TABLE)
-            # await conn.execute(Queries.POPULATE_GENRES)
-            # await conn.execute(Queries.POPULATE_BOOKS)
-            # здесь может быть создание других таблиц
-            # которые нам нужны
-            await conn.commit()
+            async with conn.cursor() as cur:
+                # создание всех таблиц
+                await cur.execute(Queries.CREATE_REVIEW_TABLE)
+                await cur.execute(Queries.DROP_CATEGORIES_TABLE)
+                await cur.execute(Queries.DROP_DISHES_TABLE)
+                await cur.execute(Queries.CREATE_CATEGORIES_TABLE)
+                await cur.execute(Queries.CREATE_DISHES_TABLE)
+                # здесь может быть создание других таблиц
+                # которые нам нужны
+                await conn.commit()
 
     async def execute(self, query, params: tuple = ()):
         async with aiosqlite.connect(self.path) as conn:
-            await conn.execute(query,params)
+            await conn.execute(query, params)
             await conn.commit()
+
