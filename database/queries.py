@@ -31,3 +31,25 @@ class Queries:
             FOREIGN KEY (category_id) REFERENCES categories(id)
         );
         """
+
+
+    POPULATE_CATEGORIES_TABLE = """
+        INSERT INTO categories (name) 
+        VALUES ("Пицца"),
+        ("Десерты"),
+        ("Коктейли"),
+        ("Напитки")
+    """
+
+
+    POPULATE_DISHES_TABLE = """
+    INSERT INTO dishes (name, price, category_id)
+    VALUES ("Баварская", 500, 1),
+           ("Сырная", 550, 1),
+           ("Пончик клубничный", 159, 2),
+           ("Чизкейк", 159, 2),
+           ("Классический молочный коктейль", 189, 3),
+           ("Шоколадный молочный коктейль", 199, 3),
+           ("Морс Вишня", 139, 4),
+           ("Fuse tea", 139, 4)
+    """
