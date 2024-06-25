@@ -1,7 +1,7 @@
 from aiogram import Router, F, types
 from aiogram.filters.command import Command
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
-import sqlite3
+from config import database
 
 menu_category_router = Router()
 
@@ -16,16 +16,22 @@ async def show_menu_category(message: types.Message):
     )
     await message.answer("Выберите категорию меню", reply_markup=kb)
 
-categories = ("пицца", "десерты", "коктейли", "напитки")
+category = ("пицца", "десерты", "коктейли", "напитки")
 
 
-@menu_category_router.message(F.text.lower().in_(categories))
+@menu_category_router.message(F.text.lower().in_(category))
 async def show_dishes(message: types.Message):
      kb = ReplyKeyboardRemove()
-     categories = message.text
-     connection = sqlite3.connect("db1.sqlite3")
-     cursor = connection.cursor()
-     query = cursor.execute("SELECT * FROM DISHES WHERE category_id = 2")
-     dishes = query.fetchall()
+     category = message.text.capitalize()
+     dishes = await database.fetch("""
+            SELECT * FROM dishes 
+            INNER JOIN categories ON dishes.category_id = categories.id
+            WHERE categories.name = ?
+     """, (category, ))
      print(dishes)
-     await message.answer("Блюда из категории ", reply_markup=kb)
+
+     await message.answer(f"Блюда из категории {category}", reply_markup=kb)
+     for dish in dishes:
+         await message.answer(f"{dish['name']} - {dish['price']} сом")
+
+

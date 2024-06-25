@@ -1,3 +1,4 @@
+import sqlite3
 class Queries:
     CREATE_REVIEW_TABLE = ''' 
     CREATE TABLE IF NOT EXISTS review_results(

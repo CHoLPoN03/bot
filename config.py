@@ -9,3 +9,5 @@ load_dotenv()
 bot = Bot(token=getenv("BOT_TOKEN"))
 dp = Dispatcher()
 database =Database("db1.sqlite3")
+
+
