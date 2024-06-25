@@ -1,6 +1,6 @@
 import asyncio
 import logging
-
+from handlers.housekg import house_router
 
 
 from config import dp, bot, database
@@ -11,6 +11,7 @@ from handlers import (
     random_pic_router,
     menu_category_router,
     myinfo_router
+
 )
 
 
@@ -24,6 +25,7 @@ async def main():
     dp.include_router(myinfo_router)
     dp.include_router(review_router)
     dp.include_router(menu_category_router)
+    dp.include_router(house_router)
     dp.include_router(echo_router)
     # запускаем бот
     dp.startup.register(on_startup)
