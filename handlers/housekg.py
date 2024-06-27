@@ -2,8 +2,13 @@ from aiogram import Router, types
 from aiogram.filters import Command
 from crawler.housekg import get_page, get_links
 
+
 house_router = Router()
 
+MAIN_URL = "https://www.house.kg/snyat"
 @house_router.message(Command("obyavlenia"))
 async def show_obyavlenia(message: types.Message):
-    await message.answer("https://www.house.kg/details/4793335f896ed8e4d1f4-26541312")
+    page = await get_page(MAIN_URL)
+    links = get_links(page)
+    for link in links:
+        await message.answer(link)

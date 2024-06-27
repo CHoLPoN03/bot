@@ -1,5 +1,6 @@
 from aiogram import Router, types, F
 from aiogram.filters.command import Command
+from crawler.housekg import get_page, get_links
 
 start_router = Router()
 
@@ -40,6 +41,12 @@ async def start_handler(message: types.Message):
                     callback_data="about"
                 )
             ],
+            [
+                types.InlineKeyboardButton(
+                    text="Объявление",
+                    callback_data="parse_house_kg"
+                )
+            ],
         ]
     )
 
@@ -69,5 +76,10 @@ async def menu_handler(callback: types.CallbackQuery):
 3. Маргарита - Увеличенная порция моцареллы, томаты, итальянские травы , томатный соус - от 565 сом"""
     await callback.message.answer(menu)
 
-
+@start_router.callback_query(F.data == "parse_house_kg")
+async def show_obyavlenia(message: types.Message):
+    get_page()
+    links = get_links("https://www.house.kg/snyat")
+    for link in links:
+        await message.answer(link)
 
